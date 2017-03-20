@@ -1,211 +1,257 @@
 
-// Tomasz Kontek 160553.cpp : Defines the entry point for the console application.
-//
+/*----- Tomasz Kontek 160553 Przetwarzanie Rozproszone laboratorium nr 1 -----*/
+// Lista jednokierunkowa LIFO
+// Lista dwukierunkowa liczb posortowanych rosnaco
 
-//Lista jednokierunkowa
-/*
-#include "stdafx.h"
 #include <stdlib.h>
 #include <iostream>
-
+#include <stdlib.h>
 using namespace std;
 
-
-struct lista
+/*-------------------------*/
+/*----- LIFO -----*/
+struct singlyLinkedListElement
 {
 	int	number;
-	struct  lista *next;
-} *top = NULL;
+	struct  singlyLinkedListElement *next;
+}* singlyFirstElement = NULL;
+/*-------------------------*/
 
-void insert(struct lista *ptr, int liczba){
-	if (ptr == NULL){
-		cout << "Dopisanie elementu na poczatku listy" << endl;
-		ptr = (struct lista *)malloc(sizeof(struct lista));
-		ptr->number = liczba;
-		ptr->next = NULL;
-	}
-	else{
-		bool alfa = 1;
-		while (alfa){
-			if (ptr->next == NULL){
-				struct lista* p;
-				p = (struct lista *)malloc(sizeof(struct lista));
-				ptr->next = p;
-				p->number = liczba;
-				p->next = NULL;
-				alfa = 0;
-			}
-			else{
-				ptr = ptr->next;
-			}
-		}
-	}
-}
-
-void wypisz(struct lista *ptr){
-	lista * temp;
-	temp = ptr;
-	while (temp != NULL){
-		cout << temp->number << " " << endl;
-		temp = temp->next;
-	}
-}
-
-lista* usun(struct lista *ptr, int liczba){
-	struct lista *topp;
-	topp = ptr;
-	struct lista * temp1;
-	struct lista * temp2;
-	temp1 = ptr;
-	temp2 = ptr;
-	while (temp1 != NULL &&  temp1->number == liczba){
-		topp = temp1->next;
-		temp2 = temp1;//previous;
-		temp1 = temp1->next;
-	}
-
-	while (temp1 != NULL){
-		bool flaga = 1;
-		if (temp1->number == liczba){
-			temp2->next = temp1->next;
-			flaga = 0;
-		}
-		if (flaga == 1){
-			temp2 = temp1;//previous;
-		}
-		temp1 = temp1->next;
-	}
-
-	return topp;
-}
-
-
-int _tmain(int argc, _TCHAR* argv[])
+/*-------------------------*/
+struct doublyLinkedListElement
 {
-	top = (struct lista *)malloc(sizeof(struct lista));
-	top->number = 10;
-	top->next = NULL;
-	wypisz(top);
-	cout << "||<<<<>>>>||" << endl;
-	insert(top, 1);
-	insert(top, 3);
-	insert(top, 5);
-	insert(top, 5);
-	insert(top, 7);
-	wypisz(top);
-	cout << "||<<<<>>>>||" << endl;
-	top = usun(top, 5);
-	wypisz(top);
-	cout << "||<<<<>>>>||" << endl;
+	int number;
+	struct doublyLinkedListElement *previous;
+	struct doublyLinkedListElement *next;
+} *doublyFirstElement=NULL;
+/*-------------------------*/
+
+void pushIntoSinglyLinkedList(int numberArg);
+void deleteFromSinglyLinkedList(int numberArg);
+void popSinglyLinkedList();
+void printSinglyLinked();
+struct doublyLinkedListElement* insertIntoDoublyLinked(int numberArg);
+struct doublyLinkedListElement* deleteFromDoublyLinkedList(int numberArg);
+void printDoublyLinked();
+
+int main()
+{
+	int mode = 0;
+	int numberArg = 0;
+
+	while (true) {
+		cout << "|| Wybierz opcje" << endl;
+		cout << "|| 1 = Dodanie elementu do listy jednokierunkowej" << endl;
+		cout << "|| 2 = Usuniecie elementu z listy jednokierunkowej" << endl;
+		cout << "|| 3 = Wypisanie listy jednokierunkowej" << endl;
+		cout << "|| 4 = Usun pierwszy element listy jednokierunkowej" << endl;
+		cout << "|| 5 = Dodanie elementu do listy dwukierunkowej" << endl;
+		cout << "|| 6 = Usuniecie elementu z listy dwukierunkowej" << endl;
+		cout << "|| 7 = Wypisanie listy  dwukierunkowej" << endl;
+		cout << endl;
+		cin >> mode; 
+		switch (mode) {
+		case 1:
+			cout << "Podaj liczbe ktora chcesz dodac do listy jednokierunkowej" << endl;
+			cin >> numberArg;
+			pushIntoSinglyLinkedList(numberArg);
+			system("cls");
+			break;
+		case 2:
+			cout << "Podaj liczbe ktora chcesz usunac z listy jednokierunkowej" << endl;
+			cin >> numberArg;
+			deleteFromSinglyLinkedList(numberArg);
+			system("cls");
+			break;
+		case 3:
+			printSinglyLinked();
+			break;
+		case 4:
+			popSinglyLinkedList();
+			system("cls");
+			break;
+		case 5:
+			cout << "Podaj liczbe ktora chcesz wpisac do listy dwukierunkowej" << endl;
+			cin >> numberArg;
+			doublyFirstElement = insertIntoDoublyLinked(numberArg);
+			system("cls");
+			break;
+		case 6:
+			cout << "Podaj liczbe ktora chcesz usunac z listy dwukierunkowej" << endl;
+			cin >> numberArg;
+			doublyFirstElement = deleteFromDoublyLinkedList(numberArg);
+			system("cls");
+			break;
+		case 7:
+			printDoublyLinked();
+			break;
+		default:
+			break;
+		}
+	}
+	
 	return 0;
 }
 
+/*---- Singly linked list-----*/
 
-*/
-//Lista dwukierunkowa
-#include "stdafx.h"
-#include <stdlib.h>
-#include <iostream>
-
-using namespace std;
-
-struct element
-{
-	struct element *previous;
-	int number;
-	struct element *next;
-} *beginn;
-
-struct element *insert(int obj, struct element *ptr)
-{
-	struct element
-		*p;
-	p = ptr->next; /* weŸ adres analizowanego elementu*/
-	if (p != NULL) /* czy koniec listy*/
-	{
-		if (obj > (p->number)){
-			p->next = insert(obj, p);
-		}
-		else
-		{
-			/* utwórz nowy element*/
-			p->previous = (struct element *)
-				malloc(sizeof(struct element));
-			/* zapamiêtaj adres nowego elementu*/
-			p = p->previous;
-			/* zainicjuj sk³adowe nowego elementu*/
-			p->number = obj;
-			p->next = ptr->next;
-			p->previous = ptr;
-		}
-	}
-	else /* koniec listy */
-	{
-		/* utwórz nowy element*/
-		p = (struct element *)malloc(sizeof(struct element));
-		/* zainicjuj sk³adowe nowego elementu*/
-		p->number = obj;
-		p->next = NULL;
-		p->previous = ptr;
-	}
-	return p; /* zwróæ adres nowego elementu*/
+/*-------------------------*/
+/*----- Dodanie jednego elementu o podanej wartoÅ›ci na koniec listy -----*/
+void pushIntoSinglyLinkedList(int numberArg) {
+	struct singlyLinkedListElement* newPtr = NULL;
+	newPtr = singlyFirstElement;
+	singlyFirstElement= (struct singlyLinkedListElement *)malloc(sizeof(struct singlyLinkedListElement));
+	singlyFirstElement->number = numberArg;
+	singlyFirstElement->next = newPtr;
 }
+/*-------------------------*/
 
-
-struct element * deleting(struct element *ptr, int numberArg){ //Usuwanie lementu listy z wartoœci¹ number
-	struct element *p = ptr; //beginning
-	struct element *top = ptr;
-
-	while (p != NULL &&  p->number == numberArg){
-		top = p->next;
-		p = p->next;
+/*-------------------------*/
+/*----- UsuniÄ™cie jednego elementu o podanej wartoÅ›ci -----*/
+void deleteFromSinglyLinkedList(int numberArg) {
+	struct singlyLinkedListElement* newPtr= singlyFirstElement;
+	struct singlyLinkedListElement* tempPtr = singlyFirstElement;
+	bool continuation = 1;
+	if (singlyFirstElement == NULL) {
 	}
+	else if (singlyFirstElement != NULL && singlyFirstElement->number == numberArg)
+	{
+		singlyFirstElement = singlyFirstElement->next;
+		delete tempPtr;
+	}
+	else {
+		while (newPtr->next != NULL && continuation == 1) {
+			if (newPtr->next->number == numberArg) {
+				tempPtr = newPtr->next;
+				newPtr->next = newPtr->next->next;
+				delete tempPtr;
+				continuation = 0;
+			}if (continuation == 1)
+				newPtr = newPtr->next;
+		}
+	}
+}
+/*-------------------------*/
+
+/*-------------------------*/
+void popSinglyLinkedList() {
+	struct singlyLinkedListElement* tempPtr;
+	if (singlyFirstElement != NULL) {
+		tempPtr = singlyFirstElement;
+		singlyFirstElement=singlyFirstElement->next;
+		delete tempPtr;
+	}
+}
+/*-------------------------*/
+
+/*-------------------------*/
+void printSinglyLinked() {
+	cout << "<<<<<>>>>>" << endl;
+	singlyLinkedListElement * temp=singlyFirstElement;
+	while (temp != NULL) {
+		cout << temp->number<< endl;
+		temp = temp->next;
+	}
+	cout << "<<<<<>>>>>" << endl << endl;
+}
+/*-------------------------*/
+
+/*----- Doubly linked list -----*/
+
+/*-------------------------*/
+/*----- Dodanie jednego elementu do listy -----*/
+struct doublyLinkedListElement *insertIntoDoublyLinked( int numberArg )
+{
+	struct doublyLinkedListElement *newPtr;
+	struct doublyLinkedListElement *tempPtr;
 	
-	while (p != NULL){
-		if (p->next!=NULL && p-> next->number == numberArg){
-			p->next = p->next->next;
-			p->next->next->previous = p;
-		}
-		p = p->next;
+	if (doublyFirstElement == NULL) {
+		doublyFirstElement = (struct doublyLinkedListElement *)malloc(sizeof(struct doublyLinkedListElement));
+		doublyFirstElement->number = numberArg;
+		doublyFirstElement->next = NULL;
+		doublyFirstElement->previous = NULL;
+		return doublyFirstElement;
 	}
-	return top;
+
+	if (doublyFirstElement->number > numberArg) {
+		newPtr = (struct doublyLinkedListElement *)malloc(sizeof(struct doublyLinkedListElement));
+		doublyFirstElement->previous = NULL;
+		newPtr->next = doublyFirstElement;
+		newPtr->number = numberArg;
+		newPtr->previous = NULL;
+		return newPtr;
+	}
+
+	tempPtr = doublyFirstElement;
+	while (true) {
+		if (tempPtr->next != NULL) {
+			if (tempPtr->next->number > numberArg) {
+				newPtr = (struct doublyLinkedListElement *)malloc(sizeof(struct doublyLinkedListElement));
+				newPtr->next = tempPtr->next;
+				newPtr->previous = tempPtr;
+				newPtr->number = numberArg;
+				tempPtr->next->previous = newPtr;
+				tempPtr->next = newPtr;
+				return doublyFirstElement;
+			}
+		}
+		else {
+			newPtr = (struct doublyLinkedListElement *)malloc(sizeof(struct doublyLinkedListElement));
+			newPtr->next = NULL;
+			newPtr->previous = tempPtr;
+			newPtr->number = numberArg;
+			tempPtr->next = newPtr;
+			return doublyFirstElement;
+		}
+		tempPtr = tempPtr->next;
+	}
+}
+/*-------------------------*/
+
+/*-------------------------*/
+struct doublyLinkedListElement * deleteFromDoublyLinkedList(int numberArg) {
+	doublyLinkedListElement *newPtr = doublyFirstElement;
+	if (doublyFirstElement->number == numberArg) {
+		if (doublyFirstElement->next == NULL) {
+			delete doublyFirstElement;
+			return NULL;
+		}
+		else {
+			newPtr = doublyFirstElement->next;
+			newPtr->previous = NULL;
+			delete doublyFirstElement;
+			return newPtr;
+		}
+	}
+	while (newPtr != NULL) {
+		if (newPtr->number == numberArg) {
+			if (newPtr->next != NULL) {
+				newPtr->previous->next = newPtr->next;
+				newPtr->next->previous = newPtr->previous;
+				delete newPtr;
+				return doublyFirstElement;
+			}
+			else {
+				newPtr->previous->next = NULL;
+				delete newPtr;
+				return doublyFirstElement;
+			}
+		}
+		newPtr = newPtr->next;
+	}
+	return doublyFirstElement;
 }
 
-		void wypisz(struct element *ptr){
-			while (ptr != NULL){
-				cout << ptr->number << " ";
-				ptr = ptr->next;
-			}
-			cout << endl << endl;
-		}
+/*-------------------------*/
 
-		int _tmain(int argc, _TCHAR* argv[])
-		{
-			beginn = (struct element *) malloc(sizeof(struct element));
-			beginn->number = -1;
-			beginn->next = NULL;
-			beginn->previous = NULL;
-
-			for (int i = 0; i < 10; i++){
-				beginn->next = insert(i, beginn);
-			}
-
-			wypisz(beginn); //OK
-
-			beginn->next = insert(15, beginn);
-			beginn->next = insert(6, beginn);
-			beginn->next = insert(20, beginn);
-
-			wypisz(beginn); //OK
-
-			beginn = deleting(beginn, 6);
-			wypisz(beginn);
-
-			beginn->next = insert(15, beginn);
-			wypisz(beginn);
-
-			return 0;
-		}
-
-
-
+/*-------------------------*/
+void printDoublyLinked() {
+	struct doublyLinkedListElement *tempPtr = doublyFirstElement;
+	cout << "<<<<<>>>>>" << endl;
+	while (tempPtr != NULL) {
+		cout << tempPtr->number << " ";
+		tempPtr = tempPtr->next;
+	}
+	cout << endl << "<<<<<>>>>>" << endl << endl;
+}
+/*-------------------------*/
