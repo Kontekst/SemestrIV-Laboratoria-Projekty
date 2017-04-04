@@ -2,7 +2,7 @@
 /*----- Tomasz Kontek 160553 grupa 4 -----*/
 /*----- Rename file to lab.c -----*/
 /*----- gcc -c lab.c -o lab.o -----*/
-/*----- gcc lab.o -0 lab.out -----*/
+/*----- gcc lab.o -o lab.out -----*/
 /*----- Przykladowe wywolanie ./lab.out 3 AB -----*/
 /*----- Liczba procesow musi byc mniejsza od 23 -----*/
 #include <stdio.h>
