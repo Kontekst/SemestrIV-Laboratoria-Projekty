@@ -1,6 +1,6 @@
 /*----- Tomasz Kontek 160553 Grupa 4 -----*/
 /*----- Programowanie Rozproszone Laboratorium Numer 4 -----*/
-//Argumenty w linii poleceñ np 7 ABC
+//Argumenty w linii poleceÅ„ np 7 ABC
 #include <windows.h>
 #include <stdio.h>
 #include <time.h>
@@ -25,7 +25,7 @@ DWORD WINAPI funkcja_watku(void *argumenty);
 int main(int argc, char **argv)
 {
 	srand(time(NULL));
-	int rozmiar = 1000000;/*00*/ // przy odkomentowaniu jednego zera ~100 M,aktualnie 10 MB, dla 10 w¹tków i frazy "ABC", czas przy 10 MB to ok.20-30 sekund a dla 100MB oko³o 2 minuty
+	int rozmiar = 1000000;/*00*/ // przy odkomentowaniu jednego zera ~100 M,aktualnie 10 MB, dla 10 wÄ…tkÃ³w i frazy "ABC", czas przy 10 MB to ok.20-30 sekund a dla 100MB okoÅ‚o 2 minuty
 	int i;
 	DWORD id;
 
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 		nazwaMalegoPliku[4] = i + 'a';
 		fopen_s(&wskMalyPlik, nazwaMalegoPliku, "w");
 		if (i != liczbaWatkow - 1) {
-			// |----- Zapisanie standardowej liczby zanków + reszty z dzielenia rozmiar/liczbaWatkow -----|
+			// |----- Zapisanie standardowej liczby zankÃ³w + reszty z dzielenia rozmiar/liczbaWatkow -----|
 			for (int j = 0; j < rozmiar / liczbaWatkow; j++) {
 				//fgets(randomChar,1, workFilePtr); //CHECK
 				przenoszonyZnak[0] = fgetc(plikRoboczyWsk);
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 
 		}
 		else {
-			// |----- Zapisanie standardowej liczby znków -----|
+			// |----- Zapisanie standardowej liczby znkÃ³w -----|
 			for (int j = 0; j < ((rozmiar / liczbaWatkow) + (rozmiar % liczbaWatkow)); j++) {
 				//fgets(randomChar,1, workFilePtr); //CHECK
 				przenoszonyZnak[0] = fgetc(plikRoboczyWsk);
@@ -102,10 +102,10 @@ int main(int argc, char **argv)
 	for (i = 0; i < liczbaWatkow; i++)
 	{
 		watki[i] = CreateThread(
-			NULL,           // atrybuty bezpieczeñstwa
-			0,              // inicjalna wielkoœæ stosu
-			funkcja_watku,  // funkcja w¹tku
-			(void *)&dane[i],// dane dla funkcji w¹tku
+			NULL,           // atrybuty bezpieczeÅ„stwa
+			0,              // inicjalna wielkoÅ›Ä‡ stosu
+			funkcja_watku,  // funkcja wÄ…tku
+			(void *)&dane[i],// dane dla funkcji wÄ…tku
 			0,              // flagi utworzenia
 			&id);
 		if (watki[i] != INVALID_HANDLE_VALUE)
@@ -134,7 +134,7 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-// trzy takie funkcje pracuj¹ wspó³bie¿nie w programie
+// trzy takie funkcje pracujÄ… wspÃ³Å‚bieÅ¼nie w programie
 DWORD WINAPI funkcja_watku(void *argumenty)
 {
 	struct daneDlaWatku *moje_dane = (struct daneDlaWatku*)argumenty;
