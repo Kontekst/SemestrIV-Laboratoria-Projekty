@@ -117,7 +117,7 @@ int main(int argc, char **argv)
 	int czyKonczyc = 0;
 	DWORD exitCode = 0;
 	while (1) {
-
+		czyKonczyc=1;
 		for (int i = 0; i < liczbaWatkow; i++) {
 			GetExitCodeProcess(watki[i], &exitCode);
 			if (exitCode == STILL_ACTIVE)
@@ -127,7 +127,6 @@ int main(int argc, char **argv)
 		//	break;
 		if (czyKonczyc == 1)
 			break;
-		Sleep(1000);
 	}
 	//free(watki);
 	//free(dane);
