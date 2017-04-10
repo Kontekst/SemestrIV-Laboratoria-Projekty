@@ -28,7 +28,7 @@ template<typename number> number potega(number zmienna, int stopien) {
 /*****************************************************************************/
 
 template<typename number> void dodawanieSzereguMalejaco(number zmienna, int liczbaIteracji, int errorNumber) {
-	// Nastêpny wyraz ci¹gu obliczam wykorzystuj¹c poprzedni
+	// NastÄ™pny wyraz ciÅ¡gu obliczam wykorzystujÅ¡c poprzedni
 	number wynik = 0;
 	int minus = 1;
 	number powNum=zmienna;
@@ -38,11 +38,11 @@ template<typename number> void dodawanieSzereguMalejaco(number zmienna, int licz
 		minus *= -1;
 		powNum *= zmienna;
 	}
-	myFile << ", wynik = " << wynik << " B³¹d bezwzglêdny = "<<wynik-absoluteError[errorNumber]<<"\n";
+	myFile << ", wynik = " << wynik << " BÅ‚Å¡d bezwzglÄ™dny = "<<wynik-absoluteError[errorNumber]<<"\n";
 }
 
 template<typename number> void dodawanieSzereguMalejacoZDefinicji(number zmienna, int liczbaIteracji, int errorNumber) {
-	// Nastêpny wyraz ci¹gu obliczam z definicji 
+	// NastÄ™pny wyraz ciÅ¡gu obliczam z definicji 
 	number wynik = 0;
 	int minus;
 	
@@ -57,14 +57,14 @@ template<typename number> void dodawanieSzereguMalejacoZDefinicji(number zmienna
 		wynik = wynik + potega(zmienna,i) * minus / i; //minus oraz 'i' nie obliczam z definicji poniewaz sa typu int, co nie wplywa na roznice w liczeniu z definicji czy wykorzystujac poprzedni wyraz
 		minus *= -1;
 	}
-	myFile << ", wynik = " << wynik << " B³¹d bezwzglêdny = " << wynik - absoluteError[errorNumber] << "\n";
+	myFile << ", wynik = " << wynik << " BÅ‚Å¡d bezwzglÄ™dny = " << wynik - absoluteError[errorNumber] << "\n";
 }
 
 /*****************************************************************************/
 
 
 template<typename number> void dodawanieSzereguRosnaco(number zmienna, int liczbaIteracji, int errorNumber) {
-	// Nastêpny wyraz ci¹gu obliczam wykorzystuj¹c poprzedni
+	// NastÄ™pny wyraz ciÅ¡gu obliczam wykorzystujÅ¡c poprzedni
 	number wynik = 0;
 	int minus;
 	
@@ -80,11 +80,11 @@ template<typename number> void dodawanieSzereguRosnaco(number zmienna, int liczb
 		minus *= -1;
 		powNum /= zmienna;
 	}
-	myFile << ", wynik = " << wynik << " B³¹d bezwzglêdny = " << wynik - absoluteError[errorNumber] << "\n";
+	myFile << ", wynik = " << wynik << " BÅ‚Å¡d bezwzglÄ™dny = " << wynik - absoluteError[errorNumber] << "\n";
 }
 
 template<typename number> void dodawanieSzereguRosnacoZDefinicji(number zmienna, int liczbaIteracji, int errorNumber) {
-	// Nastêpny wyraz ci¹gu obliczam z definicji 
+	// NastÄ™pny wyraz ciÅ¡gu obliczam z definicji 
 	number wynik = 0;
 	int minus;
 
@@ -99,7 +99,7 @@ template<typename number> void dodawanieSzereguRosnacoZDefinicji(number zmienna,
 		wynik = wynik + potega(zmienna, i) * minus / i; //minus oraz 'i' nie obliczam z definicji poniewaz sa typu int, co nie wplywa na roznice w liczeniu z definicji czy wykorzystujac poprzedni wyraz
 		minus *= -1;
 	}
-	myFile << ", wynik = " << wynik << " B³¹d bezwzglêdny = " << wynik - absoluteError[errorNumber] << "\n";
+	myFile << ", wynik = " << wynik << " BÅ‚Å¡d bezwzglÄ™dny = " << wynik - absoluteError[errorNumber] << "\n";
 }
 
 
@@ -154,7 +154,7 @@ int main()
 		}
 		/*****************************************************************************/
 		errorNumber = 0;
-		myFile << "\n\nWyniki w przypadku dodawania wyrazow szeregu rosn¹co\nprzy obliczaniu kolejnego wyrazu korzystam z poprzedniego wyrazu, w obliczeniach korzystam z formatu float\n\n";
+		myFile << "\n\nWyniki w przypadku dodawania wyrazow szeregu rosnÅ¡co\nprzy obliczaniu kolejnego wyrazu korzystam z poprzedniego wyrazu, w obliczeniach korzystam z formatu float\n\n";
 		for (float argument = 0.1; argument < 1.1; argument += 0.2) {
 			myFile << "Argument x wynosi " << setprecision(PRCL) << argument << setprecision(PRCH) << endl;
 			dodawanieSzereguRosnaco(argument, 10, errorNumber);
@@ -167,7 +167,7 @@ int main()
 		}
 
 		errorNumber = 0;
-		myFile << "\n\nWyniki w przypadku dodawania wyrazow szeregu rosn¹co\nprzy obliczaniu kolejnego wyrazu korzystam z wzoru z definicji, w obliczeniach korzystam z formatu float\n\n";
+		myFile << "\n\nWyniki w przypadku dodawania wyrazow szeregu rosnÅ¡co\nprzy obliczaniu kolejnego wyrazu korzystam z wzoru z definicji, w obliczeniach korzystam z formatu float\n\n";
 		for (float argument = 0.1; argument < 1.1; argument += 0.2) {
 			myFile << "Argument x wynosi " << setprecision(PRCL) << argument << setprecision(PRCH) << endl;
 			dodawanieSzereguRosnacoZDefinicji(argument, 10, errorNumber);
