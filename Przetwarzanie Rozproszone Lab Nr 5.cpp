@@ -22,7 +22,7 @@ INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 bool drawningInProgress;
 HWND hWnd1;
 HWND hWnd2;
-int colors[3];
+int colors[3],brushSize;
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -177,9 +177,41 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	}break;
 
-	case WM_LBUTTONDOWN: 
+	case WM_MBUTTONDOWN:
+	{
+	HDC hdc1 = GetDC(hWnd1);
+	HDC hdc2 = GetDC(hWnd2);
+	for (int i = -20; i < 21; i++) {
+		for (int j = -20; j < 21; j++) {
+			if (abs(i)+abs(j)>20)
+				continue;
+			SetPixel(hdc1, LOWORD(lParam) + i, HIWORD(lParam) + j, RGB(colors[0], colors[1], colors[2]));
+			SetPixel(hdc2, LOWORD(lParam) + i, HIWORD(lParam) + j, RGB(colors[0], colors[1], colors[2]));
+		}
+	}
+
+	ReleaseDC(hWnd1, hdc1);
+	ReleaseDC(hWnd2, hdc2);
+		
+	}break;
+
+	case WM_LBUTTONDOWN:
 	{
 		drawningInProgress = true;
+	}break;
+
+	case WM_KEYDOWN:
+	{
+		switch (wParam) {
+		case VK_UP:
+			brushSize++;
+			break;
+
+		case VK_DOWN:
+			brushSize--;
+			break;
+
+		}
 	}break;
 
 	case WM_LBUTTONUP:
@@ -192,10 +224,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		if (drawningInProgress) {
 			HDC hdc1 = GetDC(hWnd1);
 			HDC hdc2 = GetDC(hWnd2);
-			for (int i = -3; i < 4; i++) {
-				for (int j = -3; j < 4; j++) {
-					if ((i == -3 || i == 3) && (j == -3 || j == 3))
-						continue;
+			for (int i = -3 - brushSize; i < 4 +brushSize; i++) {
+				for (int j = -3 - brushSize; j < 4 + brushSize; j++) {
+					if (i*i + j*j>brushSize*brushSize)
+					continue;
 					SetPixel(hdc1, LOWORD(lParam) + i, HIWORD(lParam) + j, RGB(colors[0], colors[1], colors[2]));
 					SetPixel(hdc2, LOWORD(lParam) + i, HIWORD(lParam) + j, RGB(colors[0], colors[1], colors[2]));
 				}
