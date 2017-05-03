@@ -3,23 +3,36 @@
 // Kompilacja gcc -pthread nazwaPliku.c
 // Wywolanie z linii polecen ./a.out
 #include <stdio.h>
+#include <stdlib.h>
 #include <pthread.h>
 
+#define MAX_PRIME 100
 int wyniki[100];
+int liczbaLiczbPierwszych;
+int tablicaLiczbPierwszych[MAX_PRIME];
+pthread_mutex_t m_p;
+
+void zapisDoTablicy(int argLiczba){
+	pthread_mutex_lock(&m_p);
+	tablicaLiczbPierwszych[liczbaLiczbPierwszych] = argLiczba;
+	liczbaLiczbPierwszych++;
+	pthread_mutex_unlock(&m_p);
+}
 
 void * f(void * i){
 	int liczba = *(int *)i;
 	if(liczba<2)
 		return NULL;
 	int j;
-	for( j=2 ; j*j<=liczba; j++){
-//		printf("Liczba = %d, dzielnik = %d",liczba,j);
-		if( liczba % j == 0){
+	for( j=2 ; j*j<=liczba; j++)
+		if( liczba % j == 0)
 			return NULL;
-		}
-	}
-	printf("%d\n",liczba);
+	zapisDoTablicy(liczba);
 	return NULL;
+}
+
+int compare(const void *a,const void *b){
+	return (*(int*)a - *(int*)b);
 }
 
 int main(){
@@ -63,11 +76,13 @@ int main(){
 			pthread_join(threadsArray[k],NULL);
 		}
 
-		//printf("Calkowity licznik przeszukiwanych liczb = %d",calkowityLicznikPrzeszukiwanychLiczb);
-		//printf("IloscPrzeszukiwanych liczb = %d",iloscPrzeszukiwanychLiczb);
 		if(calkowityLicznikPrzeszukiwanychLiczb==iloscPrzeszukiwanychLiczb)
 			break;
 	}
+	
+	qsort(tablicaLiczbPierwszych,liczbaLiczbPierwszych,sizeof(int),compare);
+	for( i = 0; i < liczbaLiczbPierwszych; i++)
+		printf("Liczba nr %d = %d\n", i, tablicaLiczbPierwszych[i]);
+
 	return 0;
 }
-
